@@ -4,7 +4,7 @@ import { Text, HStack, VStack, useToast,
 NumberInput, NumberInputField, FormControl, FormLabel, FormErrorMessage,
 } from "@chakra-ui/react";
 import { MotionButton } from './MotionElements';
-import { Zoom, JackInTheBox, Slide } from "react-awesome-reveal";
+import { JackInTheBox } from "react-awesome-reveal";
 import Loading from './Loading';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';

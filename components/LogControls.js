@@ -1,9 +1,7 @@
-                           
-import { useState } from 'react';
 import { getUserProfile, updateConfig } from '../lib/db';
 import { VStack, Switch, FormControl, FormLabel, useToast } from "@chakra-ui/react";
-import { Zoom, JackInTheBox, Slide } from "react-awesome-reveal";
-import TextTransition, { presets } from "react-text-transition";
+import { JackInTheBox } from "react-awesome-reveal";
+//import TextTransition, { presets } from "react-text-transition";
 import Loading from './Loading';
 
 export default function LogControls({auth, fetching, initialConfig}) {
