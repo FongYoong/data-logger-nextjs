@@ -55,7 +55,7 @@ export default function LogForm({auth, fetching, initialConfig}) {
         >
             {({errors, touched}) => (
             <Form>
-                <VStack p={4} spacing={4} backgroundColor='white' borderWidth={2} borderRadius="lg" boxShadow="lg">
+                <VStack mx={4} p={4} spacing={4} backgroundColor='white' borderWidth={2} borderRadius="lg" boxShadow="lg">
                     <Field name="temperatureLimit" >
                         {({ field }) => (
                         <FormControl isInvalid={errors.temperatureLimit && touched.temperatureLimit} isRequired>
