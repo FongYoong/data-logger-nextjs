@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useAuth } from '../lib/auth';
-import { Zoom, JackInTheBox, Slide } from "react-awesome-reveal";
-import { MotionGetAttention, MotionButton } from '../components/MotionElements';
+import { Zoom } from "react-awesome-reveal";
+import { MotionGetAttention } from '../components/MotionElements';
 import { useBreakpointValue, useDisclosure, Divider, Heading, VStack, Button } from "@chakra-ui/react";
 import Navbar from '../components/Navbar';
 import NavbarSpace from '../components/NavbarSpace';

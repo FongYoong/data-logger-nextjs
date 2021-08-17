@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { Zoom } from "react-awesome-reveal";
-import { Flex, Heading, Text, Box } from "@chakra-ui/react";
+import { Flex, Heading } from "@chakra-ui/react";
 import Navbar from '../components/Navbar';
 import NavbarSpace from '../components/NavbarSpace';
 

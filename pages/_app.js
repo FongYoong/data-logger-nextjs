@@ -7,7 +7,7 @@ import Head from 'next/head';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 
-Router.events.on('routeChangeStart', (url) => {
+Router.events.on('routeChangeStart', () => {
   NProgress.start()
 })
 Router.events.on('routeChangeComplete', () => {
