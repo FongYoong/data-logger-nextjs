@@ -21,7 +21,7 @@ export default function LogForm({auth, fetching, initialConfig}) {
         <> {fetching ?
         <Loading />
         :
-        <JackInTheBox>
+        <JackInTheBox triggerOnce >
         <Formik
             initialValues={{
               temperatureLimit: fetching ? 25 : initialConfig.temperatureLimit,

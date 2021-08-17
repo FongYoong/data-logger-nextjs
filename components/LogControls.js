@@ -11,7 +11,7 @@ export default function LogControls({auth, fetching, initialConfig}) {
         <> {fetching ?
         <Loading />
         :
-        <JackInTheBox>
+        <JackInTheBox triggerOnce >
             <VStack m={2} p={4} spacing="4" borderWidth={2} borderRadius="lg" boxShadow="lg">
                 <FormControl display="flex" alignItems="center">
                     <FormLabel htmlFor="email-alerts" mb="0">

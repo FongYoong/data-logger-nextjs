@@ -68,6 +68,22 @@ export default function Dashboard() {
     //console.log(config);
     //console.log(essentialData);
     //console.log(configChanges);
+    const essentialDataReducer = (data) => {
+        const dateCreated = new Date(data.dateCreated);
+        return `${dateCreated.toLocaleString()} 🌡 ${data.temperature}°C`;
+    }
+
+    const configChangesReducer = (data) => {
+        let action = '';
+        if ('enableLogging' in data) {
+            action = data.enableLogging ? 'Logging Enabled ✅' : 'Logging Disabled ❌';
+        }
+        else if ('logInterval' in data) {
+            action = `Temp. Limit: ${data.temperatureLimit}, Log Interval: ${data.logInterval}`;
+        }
+        const dateCreated = new Date(data.dateCreated);
+        return `${dateCreated.toLocaleString()} 😬 ${data.username} 🔨 ${action}`; // 😃
+    }
 
     const endEssentialDataCallback = () => {
 
@@ -114,8 +130,14 @@ export default function Dashboard() {
                     {!loading && auth && <>
                         <LogControls auth={auth} fetching={fetchingConfig} initialConfig={config} />
                         <LogForm auth={auth} fetching={fetchingConfig} initialConfig={config} />
-                        <Log data={essentialData} fetching={fetchingEssentialData} endCallback={endEssentialDataCallback} />
-                        <Log data={configChanges} fetching={fetchingConfigChanges} endCallback={endConfigChangesCallback} />
+                        <Heading textAlign='center' px={8} m={4} fontSize={breakpoint==='base'?'xl':'3xl'} fontWeight="bold" >
+                            Past Data
+                        </Heading>
+                        <Log data={essentialData} fetching={fetchingEssentialData} reducer={essentialDataReducer} endCallback={endEssentialDataCallback} />
+                        <Heading textAlign='center' px={8} m={4} fontSize={breakpoint==='base'?'xl':'3xl'} fontWeight="bold" >
+                            Past Changes
+                        </Heading>
+                        <Log data={configChanges} fetching={fetchingConfigChanges} reducer={configChangesReducer} endCallback={endConfigChangesCallback} />
                     </>}
                 </VStack>
               </VStack>
