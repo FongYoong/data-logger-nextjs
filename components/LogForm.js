@@ -17,6 +17,7 @@ const LogSchema = Yup.object().shape({
 export default function LogForm({auth, fetching, initialConfig}) {
     const toast = useToast();
     const [updating, setUpdating] = useState(false);
+    const [disableSubmitButton, setDisableSubmitButton] = useState(true);
     return ( 
         <> {fetching ?
         <Loading />
@@ -33,13 +34,14 @@ export default function LogForm({auth, fetching, initialConfig}) {
                 getUserProfile(false, auth.uid, (result) => {
                     updateConfig(auth.uid, result.username, values, () => {
                         toast({
-                            title: "Success!",
+                            title: "Successly updated!",
                             description: "Cheers! 😃",
                             status: "success",
                             duration: 3000,
                             isClosable: true,
                         });
                         setUpdating(false);
+                        setDisableSubmitButton(true);
                     }, ()=> {
                         toast({
                             title: "Failed to append to config change!",
@@ -60,7 +62,12 @@ export default function LogForm({auth, fetching, initialConfig}) {
                         {({ field }) => (
                         <FormControl isInvalid={errors.temperatureLimit && touched.temperatureLimit} isRequired>
                         <FormLabel htmlFor="temperatureLimit">Temperature Limit</FormLabel>
-                        <NumberInput id="temperatureLimit" defaultValue={initialConfig.temperatureLimit} pattern="^([-+,0-9.]+)" precision={2} >
+                        <NumberInput id="temperatureLimit" defaultValue={initialConfig.temperatureLimit} pattern="^([-+,0-9.]+)" precision={2}
+                        onChange={() => {
+                            // !touched.temperatureLimit && !touched.logInterval
+                            setDisableSubmitButton(false);
+                        }}
+                        >
                             <HStack>
                                 <NumberInputField {...field} />
                                 <Text>°C</Text>
@@ -74,7 +81,12 @@ export default function LogForm({auth, fetching, initialConfig}) {
                         {({ field }) => (
                         <FormControl isInvalid={errors.logInterval && touched.logInterval} isRequired>
                         <FormLabel htmlFor="logInterval">Log Interval</FormLabel>
-                        <NumberInput id="logInterval" defaultValue={initialConfig.logInterval} min={0.5} precision={2} >
+                        <NumberInput id="logInterval" defaultValue={initialConfig.logInterval} min={0.5} precision={2}
+                            onChange={() => {
+                            // !touched.temperatureLimit && !touched.logInterval
+                            setDisableSubmitButton(false);
+                        }}
+                        >
                             <HStack>
                                 <NumberInputField {...field} />
                                 <Text>seconds</Text>
@@ -84,7 +96,7 @@ export default function LogForm({auth, fetching, initialConfig}) {
                         </FormControl>
                         )}
                     </Field>
-                    <MotionButton isLoading ={updating} mt={4} colorScheme="purple" type="submit" disabled={!touched.temperatureLimit && !touched.logInterval} >
+                    <MotionButton isLoading ={updating} mt={4} colorScheme="purple" type="submit" disabled={disableSubmitButton} >
                         Update
                     </MotionButton>
                 </VStack>

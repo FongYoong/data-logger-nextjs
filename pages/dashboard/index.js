@@ -13,6 +13,7 @@ import Log from '../../components/Log';
 import LogControls from '../../components/LogControls';
 import LogForm from '../../components/LogForm';
 import Login from '../../components/Login';
+import LineChart from '../../components/charts/LineChart';
 
 export default function Dashboard() {
     const { auth, loading } = useAuth();
@@ -24,6 +25,7 @@ export default function Dashboard() {
     const [config, setConfig] = useState(null);
     const [essentialData, setEssentialData] = useState(null);
     const [configChanges, setConfigChanges] = useState(null);
+    const [temperatureChartData, setTemperatureChartData] = useState(null);
 
     useEffect(() => {
         if (!loading) {
@@ -42,6 +44,19 @@ export default function Dashboard() {
                         }));
                         array.reverse();
                         setEssentialData(array);
+                        setTemperatureChartData({
+                            labels: array.map((item) => new Date(item.dateCreated)),
+                            datasets: [
+                                {
+                                    label: 'Temperature',
+                                    data: array.map((item) => item.temperature),
+                                    borderWidth: 1,
+                                    fill: false,
+                                    backgroundColor: 'rgb(255, 99, 132)',
+                                    borderColor: 'rgba(255, 99, 132, 0.2)',
+                                },
+                            ],
+                        });
                     }
                     else {
                         setEssentialData(null);
@@ -93,7 +108,7 @@ export default function Dashboard() {
 
     }
 
-    const breakpoint = useBreakpointValue({ base: "base", md: "md", lg: "lg" });
+    const breakpoint = useBreakpointValue({ base: "base", sm: "base", md: "base", lg: "lg" });
     return (
         <div>
             <Head>
@@ -117,7 +132,7 @@ export default function Dashboard() {
                                     width='400'
                                     height='300'
                                     src='/images/angry.gif'
-                                    alt="404 - Page Not Found"
+                                    alt="Angry cat"
                                 />
                             </Box>
                             <MotionGetAttention attentionType='rotate' >
@@ -133,11 +148,23 @@ export default function Dashboard() {
                         <Heading textAlign='center' px={8} m={4} fontSize={breakpoint==='base'?'xl':'3xl'} fontWeight="bold" >
                             Past Data
                         </Heading>
-                        <Log data={essentialData} fetching={fetchingEssentialData} reducer={essentialDataReducer} endCallback={endEssentialDataCallback} />
+                        <LineChart
+                            h="20em" w={breakpoint==='base'?'80vw':'40vw'}
+                            data={temperatureChartData} fetching={fetchingEssentialData} callback={(value) => {
+                                return value + '°C';
+                            }}
+                        />
+                        <Log
+                            h="10em" w={breakpoint==='base'?'90vw':'50vw'}
+                            data={essentialData} fetching={fetchingEssentialData} reducer={essentialDataReducer} endCallback={endEssentialDataCallback}
+                        />
                         <Heading textAlign='center' px={8} m={4} fontSize={breakpoint==='base'?'xl':'3xl'} fontWeight="bold" >
                             Past Changes
                         </Heading>
-                        <Log data={configChanges} fetching={fetchingConfigChanges} reducer={configChangesReducer} endCallback={endConfigChangesCallback} />
+                        <Log
+                            h="10em" w={breakpoint==='base'?'90vw':'50vw'}
+                            data={configChanges} fetching={fetchingConfigChanges} reducer={configChangesReducer} endCallback={endConfigChangesCallback}
+                        />
                     </>}
                 </VStack>
               </VStack>
