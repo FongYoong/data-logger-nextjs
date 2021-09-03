@@ -6,7 +6,7 @@ import { useAuth } from '../../lib/auth';
 import { getConfig, getEssentialData, getConfigChanges } from '../../lib/db';
 import { Zoom, Slide } from "react-awesome-reveal";
 import { MotionGetAttention } from '../../components/MotionElements';
-import { useBreakpointValue, useDisclosure, Heading, VStack, Box } from "@chakra-ui/react";
+import { useBreakpointValue, useDisclosure, useColorModeValue, Heading, VStack, Box } from "@chakra-ui/react";
 import Navbar from '../../components/Navbar';
 import NavbarSpace from '../../components/NavbarSpace';
 import Log from '../../components/Log';
@@ -26,6 +26,7 @@ export default function Dashboard() {
     const [essentialData, setEssentialData] = useState(null);
     const [configChanges, setConfigChanges] = useState(null);
     const [temperatureChartData, setTemperatureChartData] = useState(null);
+    const bg_color = useColorModeValue('white', 'purple.700');
 
     useEffect(() => {
         if (!loading) {
@@ -143,8 +144,8 @@ export default function Dashboard() {
                         </Zoom>
                     }
                     {!loading && auth && <>
-                        <LogControls auth={auth} fetching={fetchingConfig} initialConfig={config} />
-                        <LogForm auth={auth} fetching={fetchingConfig} initialConfig={config} />
+                        <LogControls backgroundColor={bg_color} auth={auth} fetching={fetchingConfig} initialConfig={config} />
+                        <LogForm backgroundColor={bg_color} auth={auth} fetching={fetchingConfig} initialConfig={config} />
                         <Heading textAlign='center' px={8} m={4} fontSize={breakpoint==='base'?'xl':'3xl'} fontWeight="bold" >
                             Past Data
                         </Heading>
@@ -153,16 +154,17 @@ export default function Dashboard() {
                             data={temperatureChartData} fetching={fetchingEssentialData} callback={(value) => {
                                 return value + '°C';
                             }}
+                            backgroundColor="white" p={2} borderWidth={2} borderRadius="lg" boxShadow="lg"
                         />
                         <Log
-                            h="10em" w={breakpoint==='base'?'90vw':'50vw'}
+                            h="10em" w={breakpoint==='base'?'90vw':'50vw'} backgroundColor={bg_color}
                             data={essentialData} fetching={fetchingEssentialData} reducer={essentialDataReducer} endCallback={endEssentialDataCallback}
                         />
                         <Heading textAlign='center' px={8} m={4} fontSize={breakpoint==='base'?'xl':'3xl'} fontWeight="bold" >
                             Past Changes
                         </Heading>
                         <Log
-                            h="10em" w={breakpoint==='base'?'90vw':'50vw'}
+                            h="10em" w={breakpoint==='base'?'90vw':'50vw'} backgroundColor={bg_color}
                             data={configChanges} fetching={fetchingConfigChanges} reducer={configChangesReducer} endCallback={endConfigChangesCallback}
                         />
                     </>}

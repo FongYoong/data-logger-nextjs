@@ -1,7 +1,8 @@
-import { Box } from '@chakra-ui/react';
 import { Line } from 'react-chartjs-2';
 import 'chartjs-adapter-moment';
+import { HoverableBox } from '../../components/MotionElements';
 import Loading from '../Loading';
+
 
 export default function LineChart ({ fetching, callback, data, ...props }) {
     const options = {
@@ -37,8 +38,8 @@ export default function LineChart ({ fetching, callback, data, ...props }) {
         <> {fetching ?
         <Loading />
         :
-        <Box {...props} >
+        <HoverableBox {...props} >
             <Line data={data} options={options} />
-        </Box>
+        </HoverableBox>
         } </>
 )}

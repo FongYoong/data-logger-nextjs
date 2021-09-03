@@ -4,6 +4,16 @@ import { Box, Button } from '@chakra-ui/react';
 import { Fade } from "react-awesome-reveal";
 
 export const MotionBox = motion(Box);
+
+// eslint-disable-next-line react/display-name
+export const HoverableBox = memo(({children, ...props}) => {
+    return (
+        <MotionBox whileHover={{ scale: 1.1 } } {...props} >
+            {children}
+        </MotionBox>
+    )
+});
+
 // eslint-disable-next-line react/display-name
 export const MotionButton = memo(({children, hidden, disabled, getAttention, icon, colorScheme, ...props}) => {
     const variants = useMemo(() => ({
