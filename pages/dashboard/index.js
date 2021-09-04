@@ -39,6 +39,7 @@ export default function Dashboard() {
                     setFetchingConfig(false);
                 });
                 getEssentialData(true, (data) => {
+                    console.log(data);
                     if (data) {
                         const array = Object.keys(data).map((key) => ({
                             ...data[key]

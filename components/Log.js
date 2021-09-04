@@ -31,11 +31,16 @@ export default function Log({data, fetching, reducer, endCallback, ...props}) {
                         }} m={2} py={4} px={10} spacing="4" borderWidth={2} borderRadius="lg" boxShadow="lg" {...props} >
                     <AnimateSharedLayout>
                         <motion.ul layout>
-                            {data.map(item => (
+                            {data ? data.map(item => (
                                 <motion.li key={item.dateCreated} layout>
                                     {reducer(item)}
                                 </motion.li>
-                            ))}
+                            ))
+                            :
+                                <motion.li key={0} layout>
+                                    Wow, such empty
+                                </motion.li>
+                            }
                         </motion.ul>
                     </AnimateSharedLayout>
                 </VStack>
