@@ -32,9 +32,11 @@ export default function Log({data, fetching, reducer, endCallback, ...props}) {
                     <AnimateSharedLayout>
                         <motion.ul layout>
                             {data ? data.map(item => (
+                                item.dateCreated &&
                                 <motion.li key={item.dateCreated} layout>
                                     {reducer(item)}
                                 </motion.li>
+                                
                             ))
                             :
                                 <motion.li key={0} layout>

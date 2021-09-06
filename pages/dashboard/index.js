@@ -39,12 +39,16 @@ export default function Dashboard() {
                     setFetchingConfig(false);
                 });
                 getEssentialData(true, (data) => {
-                    console.log(data);
                     if (data) {
-                        const array = Object.keys(data).map((key) => ({
+                        let array = Object.keys(data).map((key) => ({
                             ...data[key]
-                        }));
-                        array.reverse();
+                        })).filter((item) => item.dateCreated);
+                        //array.reverse();
+                        array.sort((a, b) => (a.dateCreated > b.dateCreated) ? -1 : 11);
+                        if (array.length > 500) {
+                            array = array.slice(0, 500);
+                        }
+                        //console.log(array);
                         setEssentialData(array);
                         setTemperatureChartData({
                             labels: array.map((item) => new Date(item.dateCreated)),
@@ -52,7 +56,7 @@ export default function Dashboard() {
                                 {
                                     label: 'Temperature',
                                     data: array.map((item) => item.temperature),
-                                    borderWidth: 1,
+                                    borderWidth: 3,
                                     fill: false,
                                     backgroundColor: 'rgb(255, 99, 132)',
                                     borderColor: 'rgba(255, 99, 132, 0.2)',
@@ -91,15 +95,21 @@ export default function Dashboard() {
     }
 
     const configChangesReducer = (data) => {
-        let action = '';
-        if ('enableLogging' in data) {
-            action = data.enableLogging ? 'Logging Enabled ✅' : 'Logging Disabled ❌';
-        }
-        else if ('logInterval' in data) {
-            action = `Temp. Limit: ${data.temperatureLimit}, Log Interval: ${data.logInterval}`;
-        }
         const dateCreated = new Date(data.dateCreated);
-        return `${dateCreated.toLocaleString()} 😬 ${data.username} 🔨 ${action}`; // 😃
+        if (data.uid == "device") {
+            const enabled = data.enableLogging ? 'Logging Enabled ✅' : 'Logging Disabled ❌';
+            return `${dateCreated.toLocaleString()} 🖥 Device 🔨 ${enabled}, Temp. Limit: ${data.temperatureLimit}, Log Interval: ${data.logInterval}`;
+        }
+        else {
+            let action = '';
+            if ('enableLogging' in data) {
+                action = data.enableLogging ? 'Logging Enabled ✅' : 'Logging Disabled ❌';
+            }
+            else if ('logInterval' in data) {
+                action = `Temp. Limit: ${data.temperatureLimit}, Log Interval: ${data.logInterval}`;
+            }
+            return `${dateCreated.toLocaleString()} 😬 ${data.username} 🔨 ${action}`; // 😃
+        }
     }
 
     const endEssentialDataCallback = () => {
