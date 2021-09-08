@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ReactInterval from 'react-interval';
 import TextTransition, { presets } from "react-text-transition";
 

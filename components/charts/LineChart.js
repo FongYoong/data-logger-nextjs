@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import dynamic from "next/dynamic";
 import { Chart, Line } from "react-chartjs-2";
 import "chartjs-adapter-moment";
 import { HoverableBox } from "../../components/MotionElements";

@@ -1,8 +1,7 @@
 import { getUserProfile, updateConfig } from '../lib/db';
-import { VStack, Switch, Flex, Text, useToast } from "@chakra-ui/react";
+import { Switch, Flex, Text, useToast } from "@chakra-ui/react";
 import { JackInTheBox } from "react-awesome-reveal";
 import { HoverableBox } from '../components/MotionElements';
-//import TextTransition, { presets } from "react-text-transition";
 import Loading from './Loading';
 
 export default function LogControls({auth, fetching, initialConfig, ...props}) {
