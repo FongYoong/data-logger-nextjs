@@ -33,7 +33,12 @@ export default function LogForm({auth, fetching, initialConfig, ...props}) {
                     onSubmit={values => {
                         setUpdating(true);
                         getUserProfile(false, auth.uid, (result) => {
-                            updateConfig(auth.uid, result.username, values, () => {
+                            updateConfig(auth.uid, result.username,
+                            {
+                                ...values,
+                                logInterval: Math.trunc(parseFloat(values.logInterval) * 1000)
+                            }
+                            , () => {
                                 toast({
                                     title: "Successly updated!",
                                     description: "Cheers! 😃",
@@ -63,7 +68,7 @@ export default function LogForm({auth, fetching, initialConfig, ...props}) {
                                 {({ field }) => (
                                 <FormControl isInvalid={errors.temperatureLimit && touched.temperatureLimit} isRequired>
                                 <FormLabel htmlFor="temperatureLimit">Temperature Limit</FormLabel>
-                                <NumberInput id="temperatureLimit" defaultValue={initialConfig.temperatureLimit} pattern="^([-+,0-9.]+)" precision={2}
+                                <NumberInput id="temperatureLimit" defaultValue={initialConfig.temperatureLimit} pattern="^([+,0-9.]+)" min={-273} precision={2}
                                 onChange={() => {
                                     // !touched.temperatureLimit && !touched.logInterval
                                     setDisableSubmitButton(false);
@@ -82,7 +87,7 @@ export default function LogForm({auth, fetching, initialConfig, ...props}) {
                                 {({ field }) => (
                                 <FormControl isInvalid={errors.logInterval && touched.logInterval} isRequired>
                                 <FormLabel htmlFor="logInterval">Log Interval</FormLabel>
-                                <NumberInput id="logInterval" defaultValue={initialConfig.logInterval} min={0.5} precision={2}
+                                <NumberInput id="logInterval" defaultValue={initialConfig.logInterval / 1000} pattern="^([-+,0-9.]+)" min={0.5} precision={2}
                                     onChange={() => {
                                     // !touched.temperatureLimit && !touched.logInterval
                                     setDisableSubmitButton(false);

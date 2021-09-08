@@ -1,40 +1,52 @@
-import { Line } from "react-chartjs-2";
+import { useEffect } from 'react';
+import dynamic from "next/dynamic";
+import { Chart, Line } from "react-chartjs-2";
 import "chartjs-adapter-moment";
 import { HoverableBox } from "../../components/MotionElements";
 import Loading from "../Loading";
+import annotationPlugin from 'chartjs-plugin-annotation';
+Chart.register(annotationPlugin);
 
-export default function LineChart({ fetching, callback, data, ...props }) {
+export default function LineChart({ fetching, callback, data, annotations, ...props }) {
+    useEffect(() => {
+        const zoomPluginPromise = import('chartjs-plugin-zoom');
+        zoomPluginPromise.then((zoomPlugin) => {
+            Chart.register(zoomPlugin);
+            console.log(zoomPlugin);
+            console.log(annotationPlugin);
+        });
+    }, []);
     const delayBetweenPoints = 0;
-    const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
+    //const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
     const animation = {
-    x: {
-        type: 'number',
-        easing: 'linear',
-        duration: delayBetweenPoints,
-        from: NaN, // the point is initially skipped
-        delay(ctx) {
-        if (ctx.type !== 'data' || ctx.xStarted) {
-            return 0;
-        }
-        ctx.xStarted = true;
-        return ctx.index * delayBetweenPoints;
-        }
-    },
-    y: {
-        type: 'number',
+        x: {
+            type: 'number',
             easing: 'linear',
             duration: delayBetweenPoints,
-            from: previousY,
+            from: NaN, // the point is initially skipped
             delay(ctx) {
-            if (ctx.type !== 'data' || ctx.yStarted) {
+            if (ctx.type !== 'data' || ctx.xStarted) {
                 return 0;
             }
-            ctx.yStarted = true;
+            ctx.xStarted = true;
             return ctx.index * delayBetweenPoints;
             }
-        }
+        },
+        y: {
+            type: 'number',
+                easing: 'linear',
+                duration: delayBetweenPoints,
+                //from: previousY,
+                delay(ctx) {
+                if (ctx.type !== 'data' || ctx.yStarted) {
+                    return 0;
+                }
+                ctx.yStarted = true;
+                return ctx.index * delayBetweenPoints;
+                }
+            }
     };
-    const options = {
+    const chartOptions = {
         //animation: false,
         animation,
         spanGaps: true,
@@ -42,8 +54,28 @@ export default function LineChart({ fetching, callback, data, ...props }) {
         responsive: true,
         plugins: {
             legend: {
-            position: "top",
+                position: "top",
             },
+            annotation: {
+                annotations: annotations
+            },
+            zoom: {
+                zoom: {
+                    wheel: {
+                        enabled: true,
+                    },
+                    pinch: {
+                        enabled: true
+                    },
+                    mode: 'xy',
+                    speed: 100
+                },
+                pan: {
+                    enabled: true,
+                    mode: "xy",
+                    speed: 100
+                }
+            }
         },
         scales: {
             y: {
@@ -80,7 +112,7 @@ export default function LineChart({ fetching, callback, data, ...props }) {
         <Loading />
         ) : (
         <HoverableBox {...props}>
-            <Line data={data} options={options} />
+            <Line data={data} options={chartOptions} />
         </HoverableBox>
         )}
     </>
